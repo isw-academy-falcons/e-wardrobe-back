@@ -1,5 +1,8 @@
 package com.interswitchng.ewardrobe.data.model;
 
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +24,7 @@ public class User {
     private String id;
     private String firstname;
     private String lastname;
+    @Email
     private String email;
     private String password;
     private Gender gender;
