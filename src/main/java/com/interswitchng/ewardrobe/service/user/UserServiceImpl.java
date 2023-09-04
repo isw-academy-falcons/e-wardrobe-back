@@ -53,6 +53,12 @@ public class UserServiceImpl implements UserService{
         return userRepository.findUserByEmailIgnoreCase(email).orElseThrow(()-> new InvalidEmailException("Bad Credentials"));
     }
 
+    @Override
+    public void deleteUserByEmail(String mail) throws InvalidEmailException {
+        User user_found = userRepository.findByEmail(mail).orElseThrow(() -> new InvalidEmailException("not found"));
+        userRepository.delete(user_found);
+    }
+
     private boolean isValidEmail(String email){
 //        email must only contain letters, numbers, underscores, hyphens, and periods
 //        email must contain an @ symbol

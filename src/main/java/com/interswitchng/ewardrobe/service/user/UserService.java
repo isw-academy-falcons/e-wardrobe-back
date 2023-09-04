@@ -10,4 +10,6 @@ import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
 public interface UserService {
     void signUp(SignupDto signupDto) throws PasswordMisMatchException, UserAlreadyExistException, InvalidEmailException;
     User loadUser(String email) throws InvalidEmailException;
+
+    void deleteUserByEmail(String mail) throws InvalidEmailException;
 }

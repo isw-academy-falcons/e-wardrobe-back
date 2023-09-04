@@ -21,7 +21,11 @@ public class UserController {
 
     @PostMapping("/sign-up")
     public ResponseEntity <?> signUp(@RequestBody SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
-        userService.signUp(signupDto);
-        return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+        try {
+            userService.signUp(signupDto);
+            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+        }catch (RuntimeException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 }

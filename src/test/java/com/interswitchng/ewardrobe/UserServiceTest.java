@@ -9,6 +9,7 @@ import com.interswitchng.ewardrobe.exception.PasswordMisMatchException;
 import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
 import com.interswitchng.ewardrobe.repository.UserRepository;
 import com.interswitchng.ewardrobe.service.user.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,22 @@ public class UserServiceTest {
         SignupDto request = new SignupDto();
         request.setFirstName("John");
         request.setLastName("John");
-        request.setEmail("je2s14512@gmail.com");
+        request.setEmail("je2s14712@gmail.com");
         request.setGender("MALE");
         request.setPassword("password");
         request.setConfirmPassword("password");
         userService.signUp(request);
 
-        Optional<User> savedUser = userRepo.findByEmail("je2s14512@gmail.com");
+        Optional<User> savedUser = userRepo.findByEmail("je2s14712@gmail.com");
 
         // Add log statements to debug
         System.out.println("Saved User: " + savedUser.orElse(null));
 
         Assertions.assertEquals(Plan.FREE, savedUser.get().getPlan());
+    }
+    @AfterEach
+    void tearDown() throws InvalidEmailException {
+        userService.deleteUserByEmail("je2s14712@gmail.com");
     }
 
 }
