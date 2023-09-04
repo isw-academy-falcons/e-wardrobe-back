@@ -1,16 +1,16 @@
 package com.interswitchng.ewardrobe.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import lombok.*;
 
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Setter
 @Getter
+@Builder
 public class LoginDto {
+    @Email
     private String email;
     private String password;
 }

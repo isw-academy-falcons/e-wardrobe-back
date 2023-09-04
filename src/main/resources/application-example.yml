@@ -1,6 +1,12 @@
 spring:
   data:
     mongodb:
-      database: $$$$$$$$$$$$
-      uri: mongodb:$$$$$$$$$$
+      database: ${MONGODB_DB}
+      uri: mongodb:${MONGODB_URI}
+
+
+
+ewardrobe:
+  app:
+    SecretKey:{SECRET_KEY}
 

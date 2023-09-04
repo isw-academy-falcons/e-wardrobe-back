@@ -3,6 +3,7 @@ package com.interswitchng.ewardrobe;
 import com.interswitchng.ewardrobe.data.model.Gender;
 import com.interswitchng.ewardrobe.data.model.User;
 import com.interswitchng.ewardrobe.dto.SignupDto;
+import com.interswitchng.ewardrobe.exception.InvalidEmailException;
 import com.interswitchng.ewardrobe.exception.PasswordMisMatchException;
 import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
 import com.interswitchng.ewardrobe.repository.UserRepository;
@@ -24,7 +25,7 @@ public class UserServiceTest {
     private UserRepository userRepo;
 
     @Test
-    public void testThatAUserCanSignUp() throws UserAlreadyExistException, PasswordMisMatchException {
+    public void testThatAUserCanSignUp() throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
         SignupDto request = new SignupDto();
         request.setFirstName("John");
         request.setLastName("John");
