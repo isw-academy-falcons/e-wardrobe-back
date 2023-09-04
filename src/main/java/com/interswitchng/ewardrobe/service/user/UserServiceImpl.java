@@ -24,7 +24,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public SignupResponse signUp(SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
-        if (isValidEmail(signupDto.getEmail().toLowerCase()) && isValidPassword(signupDto.getPassword())){
+        if (!isValidEmail(signupDto.getEmail().toLowerCase()) && !isValidPassword(signupDto.getPassword())){
+            throw new InvalidEmailException(signupDto.getEmail() +" is not a valid Email address");
+        }
             Optional<User> savedUser = userRepository.findUserByEmailIgnoreCase(signupDto.getEmail());
             if (savedUser.isPresent()){
                 throw new UserAlreadyExistException("User with this email address already exist !!!");
@@ -49,9 +51,8 @@ public class UserServiceImpl implements UserService{
                     throw new PasswordMisMatchException("Password does not match");
                 }
             }
-        }else {
-            throw new InvalidEmailException(signupDto.getEmail() +" is not a valid Email address");
-        }
+
+
     }
 
     @Override
