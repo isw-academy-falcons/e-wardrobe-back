@@ -1,9 +1,9 @@
 package com.interswitchng.ewardrobe.data.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,9 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
+@ToString
 public class User {
     @Id
-    private String id;
+    private String userId;
     private String firstname;
     private String lastname;
     private String email;
@@ -26,5 +27,8 @@ public class User {
     private Gender gender;
     private Plan plan;
     private LocalDateTime dateCreated = LocalDateTime.now();
-    private List<Cloth> cloths = new ArrayList<>();
+
+    public User(String userId){
+        this.userId=userId;
+    }
 }
