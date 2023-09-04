@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
+@ToString
 public class User {
     @Id
     private String userId;

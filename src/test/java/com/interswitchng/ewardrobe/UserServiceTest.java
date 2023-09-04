@@ -1,6 +1,7 @@
 package com.interswitchng.ewardrobe;
 
 import com.interswitchng.ewardrobe.data.model.Gender;
+import com.interswitchng.ewardrobe.data.model.Plan;
 import com.interswitchng.ewardrobe.data.model.User;
 import com.interswitchng.ewardrobe.dto.SignupDto;
 import com.interswitchng.ewardrobe.exception.InvalidEmailException;
@@ -29,18 +30,18 @@ public class UserServiceTest {
         SignupDto request = new SignupDto();
         request.setFirstName("John");
         request.setLastName("John");
-        request.setEmail("jes13@gmail.com");
+        request.setEmail("je2s14512@gmail.com");
         request.setGender("MALE");
         request.setPassword("password");
         request.setConfirmPassword("password");
         userService.signUp(request);
 
-        Optional<User> savedUser = userRepo.findByEmail("jes1@gmail.com");
+        Optional<User> savedUser = userRepo.findByEmail("je2s14512@gmail.com");
 
         // Add log statements to debug
         System.out.println("Saved User: " + savedUser.orElse(null));
 
-        Assertions.assertEquals("FREE", savedUser.orElse(null).getPlan());
+        Assertions.assertEquals(Plan.FREE, savedUser.get().getPlan());
     }
 
 }
