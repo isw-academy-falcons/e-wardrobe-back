@@ -1,4 +1,4 @@
-package com.interswitchng.ewardrobe.config;
+package com.interswitchng.ewardrobe.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

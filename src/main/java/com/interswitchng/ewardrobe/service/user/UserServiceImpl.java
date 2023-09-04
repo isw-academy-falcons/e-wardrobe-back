@@ -4,6 +4,7 @@ import com.interswitchng.ewardrobe.data.model.Gender;
 import com.interswitchng.ewardrobe.data.model.Plan;
 import com.interswitchng.ewardrobe.data.model.User;
 import com.interswitchng.ewardrobe.dto.SignupDto;
+import com.interswitchng.ewardrobe.dto.SignupResponse;
 import com.interswitchng.ewardrobe.exception.InvalidEmailException;
 import com.interswitchng.ewardrobe.exception.PasswordMisMatchException;
 import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
@@ -22,9 +23,9 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void signUp(SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
-        if (isValidEmail(signupDto.getEmail().toLowerCase())){
-            Optional<User> savedUser = userRepository.findByEmail(signupDto.getEmail().toLowerCase());
+    public SignupResponse signUp(SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
+        if (isValidEmail(signupDto.getEmail().toLowerCase()) && isValidPassword(signupDto.getPassword())){
+            Optional<User> savedUser = userRepository.findUserByEmailIgnoreCase(signupDto.getEmail());
             if (savedUser.isPresent()){
                 throw new UserAlreadyExistException("User with this email address already exist !!!");
             }else{
@@ -32,12 +33,17 @@ public class UserServiceImpl implements UserService{
                     User newUser = new User();
                     newUser.setFirstname(signupDto.getFirstName());
                     newUser.setLastname(signupDto.getLastName());
-                    newUser.setEmail(signupDto.getEmail().toLowerCase());
+                    newUser.setEmail(signupDto.getEmail());
                     newUser.setPassword(passwordEncoder.encode(signupDto.getPassword()));
-                    newUser.setDateCreated(LocalDateTime.now());
                     newUser.setGender(Gender.valueOf(signupDto.getGender().toUpperCase()));
                     newUser.setPlan(Plan.FREE);
-                    userRepository.save(newUser);
+                    User saved = userRepository.save(newUser);
+                    return SignupResponse.builder()
+                            .email(saved.getEmail())
+                            .firstName(saved.getFirstname())
+                            .lastName(saved.getLastname())
+                            .message("User account created successfully. ")
+                            .build();
                 }
                 else {
                     throw new PasswordMisMatchException("Password does not match");
@@ -64,5 +70,9 @@ public class UserServiceImpl implements UserService{
 //        email must contain an @ symbol
 //        email must contain . after @ symbol
         return email.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+    }
+    private boolean isValidPassword(String password){
+//        password must have at least 8 characters, 1 upper case, 1 number, 1 special character
+        return password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$\n");
     }
 }

@@ -1,4 +1,4 @@
-package com.interswitchng.ewardrobe.config;
+package com.interswitchng.ewardrobe.security.config;
 
 
 import ch.qos.logback.core.net.SocketConnector;

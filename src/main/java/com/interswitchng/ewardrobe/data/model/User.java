@@ -22,13 +22,11 @@ public class User {
     private String userId;
     private String firstname;
     private String lastname;
-    @Email
     private String email;
     private String password;
     private Gender gender;
     private Plan plan;
     private LocalDateTime dateCreated = LocalDateTime.now();
-    private List<Cloth> cloths = new ArrayList<>();
 
     public User(String userId){
         this.userId=userId;

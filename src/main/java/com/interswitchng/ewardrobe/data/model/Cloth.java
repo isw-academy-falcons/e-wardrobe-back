@@ -19,4 +19,5 @@ public class Cloth {
     private ClothType clothType;
     private Category category;
     private CollectionType collectionType;
+    private String userId;
 }

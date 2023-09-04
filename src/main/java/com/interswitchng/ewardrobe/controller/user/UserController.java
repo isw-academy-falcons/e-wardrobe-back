@@ -1,10 +1,13 @@
 package com.interswitchng.ewardrobe.controller.user;
 
 import com.interswitchng.ewardrobe.dto.SignupDto;
+import com.interswitchng.ewardrobe.dto.SignupResponse;
+import com.interswitchng.ewardrobe.exception.EWardRobeException;
 import com.interswitchng.ewardrobe.exception.InvalidEmailException;
 import com.interswitchng.ewardrobe.exception.PasswordMisMatchException;
 import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
 import com.interswitchng.ewardrobe.service.user.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +23,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity <?> signUp(@RequestBody SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
+    public ResponseEntity <SignupResponse> signUp(@RequestBody @Valid SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException, EWardRobeException {
         try {
-            userService.signUp(signupDto);
-            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+            SignupResponse response = userService.signUp(signupDto);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch (RuntimeException ex){
-            throw new RuntimeException(ex.getMessage());
+            throw new EWardRobeException(ex.getMessage());
         }
     }
 }
