@@ -8,12 +8,12 @@ import com.interswitchng.ewardrobe.dto.SignupResponse;
 import com.interswitchng.ewardrobe.exception.InvalidEmailException;
 import com.interswitchng.ewardrobe.exception.PasswordMisMatchException;
 import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
+import com.interswitchng.ewardrobe.exception.UserNotFoundException;
 import com.interswitchng.ewardrobe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService{
     public void deleteUserByEmail(String mail) throws InvalidEmailException {
         User user_found = userRepository.findByEmail(mail).orElseThrow(() -> new InvalidEmailException("not found"));
         userRepository.delete(user_found);
+    }
+
+    @Override
+    public User findById(String userId) throws UserNotFoundException {
+        return userRepository.findById(userId).orElseThrow(
+                ()-> new UserNotFoundException("User not found"));
     }
 
     private boolean isValidEmail(String email){

@@ -10,3 +10,6 @@ ewardrobe:
   app:
     SecretKey:{SECRET_KEY}
 
+unsplash:
+  clientId: {CLIENT_ID}
+  apiUrl: {API_URL}
