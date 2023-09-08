@@ -5,6 +5,7 @@ import com.interswitchng.ewardrobe.repository.ClothRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,5 +22,15 @@ public class ClothServiceImpl implements ClothService{
     @Override
     public Optional<Cloth> findByPictureUrl(String pictureUrl) {
         return clothRepository.findByImageUrl(pictureUrl);
+    }
+
+    @Override
+    public List<Cloth> findClothByUserId(String userId) {
+        return clothRepository.findClothByUserId(userId);
+    }
+
+    @Override
+    public List<Cloth> findClothByUserIdAndImageUrl(String userId, String pictureUrl) {
+      return clothRepository.findClothByUserIdAndImageUrl(userId,pictureUrl);
     }
 }

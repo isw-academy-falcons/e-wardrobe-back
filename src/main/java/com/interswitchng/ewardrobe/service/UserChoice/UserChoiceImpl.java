@@ -9,6 +9,7 @@ import com.interswitchng.ewardrobe.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,21 +21,24 @@ public class UserChoiceImpl implements UserChoice {
 @Autowired
 private ClothService clothService;
 
- public String saveUserChoice(String userId, String pictureUrl) throws UserNotFoundException {
-     User foundUser = userService.findById(userId);
-     Optional<Cloth> cloth = clothService.findByPictureUrl(pictureUrl);
-     if(cloth.isPresent()){
+    public String saveUserChoice(String userId, String pictureUrl) throws UserNotFoundException {
+        User foundUser = userService.findById(userId);
 
-      clothService.saveCloth(cloth.get());
-     }
-     else {
+        List<Cloth> clothByUserId = clothService.findClothByUserIdAndImageUrl(foundUser.getUserId(), pictureUrl);
+
+        if (!clothByUserId.isEmpty()) {
+
+            return "Cloth has been saved successfully";
+        }
+
+
         Cloth newCloth = new Cloth();
-         newCloth.setUserId(foundUser.getUserId());
-         newCloth.setImageUrl(pictureUrl);
-         newCloth.setCollectionType(CollectionType.UNSPLASH);
-         clothService.saveCloth(newCloth);
+        newCloth.setUserId(foundUser.getUserId());
+        newCloth.setImageUrl(pictureUrl);
+        newCloth.setCollectionType(CollectionType.UNSPLASH);
+        clothService.saveCloth(newCloth);
 
-     }
-     return "Cloth has been saved successfully";
- }
+        return "Cloth has been saved successfully";
+    }
+
 }
