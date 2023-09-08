@@ -16,3 +16,7 @@ cloudinary:
   api-secret: your-api-secret
 
 
+
+unsplash:
+  clientId: {CLIENT_ID}
+  apiUrl: {API_URL}
