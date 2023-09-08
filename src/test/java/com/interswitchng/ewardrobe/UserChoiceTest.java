@@ -16,7 +16,7 @@ public class UserChoiceTest {
 
     @Test
     public void saveUserChoice() throws UserNotFoundException {
-        String userId = "{USER_ID}";
+        String userId = "64f9e18b52dcd06039926aef";
         String pictureUrl="https://unsplash...";
 
         String savedUserChoice = userChoice.saveUserChoice(userId, pictureUrl);

@@ -5,6 +5,8 @@ import com.interswitchng.ewardrobe.repository.ClothRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ClothServiceImpl implements ClothService{
 
@@ -14,5 +16,10 @@ public class ClothServiceImpl implements ClothService{
     @Override
     public void saveCloth(Cloth cloth) {
         clothRepository.save(cloth);
+    }
+
+    @Override
+    public Optional<Cloth> findByPictureUrl(String pictureUrl) {
+        return clothRepository.findByImageUrl(pictureUrl);
     }
 }
