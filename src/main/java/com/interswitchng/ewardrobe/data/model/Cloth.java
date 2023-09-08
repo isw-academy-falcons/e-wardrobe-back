@@ -21,4 +21,6 @@ public class Cloth {
     private Category category;
     private CollectionType collectionType;
     private String userId;
+    private String url;
 }
+

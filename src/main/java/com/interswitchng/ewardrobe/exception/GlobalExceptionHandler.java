@@ -44,5 +44,14 @@ public class GlobalExceptionHandler {
                 .message(e.getLocalizedMessage())
                 .build());
     }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<APIError> handleUserNotFound(UserNotFoundException e){
+        e.printStackTrace();
+        return ResponseEntity.badRequest().body(APIError.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(e.getLocalizedMessage())
+                .build());
+    }
+
 
 }
