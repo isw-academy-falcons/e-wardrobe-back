@@ -10,5 +10,5 @@ public interface ClothRepository extends MongoRepository<Cloth,String> {
     Optional<Cloth> findByImageUrl(String pictureUrl);
     List<Cloth> findClothByUserId(String userId);
 
-    List<Cloth> findClothByUserIdAndImageUrl(String userId, String pictureUrl);
+    Cloth findClothByUserIdAndImageUrl(String userId, String pictureUrl);
 }

@@ -24,9 +24,9 @@ private ClothService clothService;
     public String saveUserChoice(String userId, String pictureUrl) throws UserNotFoundException {
         User foundUser = userService.findById(userId);
 
-        List<Cloth> clothByUserId = clothService.findClothByUserIdAndImageUrl(foundUser.getUserId(), pictureUrl);
+        Cloth clothByUserId = clothService.findClothByUserIdAndImageUrl(foundUser.getUserId(), pictureUrl);
 
-        if (!clothByUserId.isEmpty()) {
+        if (clothByUserId != null) {
 
             return "Cloth has been saved successfully";
         }

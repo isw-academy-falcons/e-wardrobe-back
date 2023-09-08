@@ -30,7 +30,7 @@ public class ClothServiceImpl implements ClothService{
     }
 
     @Override
-    public List<Cloth> findClothByUserIdAndImageUrl(String userId, String pictureUrl) {
+    public Cloth findClothByUserIdAndImageUrl(String userId, String pictureUrl) {
       return clothRepository.findClothByUserIdAndImageUrl(userId,pictureUrl);
     }
 }

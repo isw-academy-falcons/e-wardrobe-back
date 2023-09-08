@@ -13,5 +13,5 @@ public interface ClothService {
 
     List<Cloth> findClothByUserId(String userId);
 
-    List<Cloth> findClothByUserIdAndImageUrl(String userId, String pictureUrl);
+    Cloth findClothByUserIdAndImageUrl(String userId, String pictureUrl);
 }
