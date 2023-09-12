@@ -2,11 +2,18 @@ package com.interswitchng.ewardrobe;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.interswitchng.ewardrobe.**")
+@EnableAsync
+@EnableWebMvc
+@EntityScan(basePackages = "com.interswitchng.ewardrobe.**")
 public class EWardrobeApplication {
 
     public static void main(String[] args) {
@@ -19,6 +26,7 @@ public class EWardrobeApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
+                        .allowedMethods("*")
                         .allowedOrigins("*");
             }
         };
