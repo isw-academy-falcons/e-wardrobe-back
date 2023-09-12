@@ -72,6 +72,11 @@ public class UserServiceImpl implements UserService{
                 ()-> new UserNotFoundException("User not found"));
     }
 
+    @Override
+    public User findUserByEmail(String email) throws UserNotFoundException {
+      return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User cannot be found"));
+    }
+
     private boolean isValidEmail(String email){
 //        email must only contain letters, numbers, underscores, hyphens, and periods
 //        email must contain an @ symbol
