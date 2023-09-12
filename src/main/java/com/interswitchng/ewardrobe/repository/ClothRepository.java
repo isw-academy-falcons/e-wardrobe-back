@@ -1,6 +1,11 @@
 package com.interswitchng.ewardrobe.repository;
 
+import com.interswitchng.ewardrobe.data.model.Category;
 import com.interswitchng.ewardrobe.data.model.Cloth;
+import com.interswitchng.ewardrobe.data.model.ClothType;
+import com.interswitchng.ewardrobe.data.model.CollectionType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -11,4 +16,9 @@ public interface ClothRepository extends MongoRepository<Cloth,String> {
     List<Cloth> findClothByUserId(String userId);
 
     Cloth findClothByUserIdAndImageUrl(String userId, String pictureUrl);
+//
+//    Page<Cloth> findAllByUserId(String userId, Pageable pageable);
+//
+//    Page<Cloth> findAllByCriteria(ClothType clothType, Category category, CollectionType collectionType,
+//                                  String userId, Pageable pageable);
 }
