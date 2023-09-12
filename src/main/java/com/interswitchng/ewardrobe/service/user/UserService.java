@@ -15,4 +15,6 @@ public interface UserService {
     void deleteUserByEmail(String mail) throws InvalidEmailException;
 
     User findById(String userId) throws UserNotFoundException;
+
+    User findUserByEmail(String email) throws UserNotFoundException;
 }
