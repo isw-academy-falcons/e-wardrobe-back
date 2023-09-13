@@ -22,10 +22,10 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         Server server = new Server();
-        server.setUrl("http://localhost:8080");
+        server.setUrl("https://skyfitzz.up.railway.app");
 
         Server server1 = new Server();
-        server1.setUrl("https://skyfitzz.up.railway.app");
+        server1.setUrl("http://localhost:8080");
 
         return new OpenAPI()
                 .servers(List.of(server, server1))
