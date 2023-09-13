@@ -2,7 +2,11 @@ spring:
   data:
     mongodb:
       database: ${MONGODB_DB}
-      uri: ${MONGODB_URI}
+      uri: ${MONGO_URL}
+      host: ${MONGOHOST}
+      username: ${MONGOUSER}
+      password: ${MONGOPASSWORD}
+      port: ${MONGOPORT}
   servlet:
     multipart:
       location: uploads/
