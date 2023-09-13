@@ -14,7 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Cloth {
     @Id
-    private String id;
+    private String clothId;
+    private String imageUrl;
     private String description;
     private ClothType clothType;
     private Category category;

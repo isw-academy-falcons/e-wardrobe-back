@@ -18,4 +18,8 @@ public interface UserService {
     User loadUser(String email) throws InvalidEmailException;
 
     void deleteUserByEmail(String mail) throws InvalidEmailException;
+
+    User findById(String userId) throws UserNotFoundException;
+
+    User findUserByEmail(String email) throws UserNotFoundException;
 }

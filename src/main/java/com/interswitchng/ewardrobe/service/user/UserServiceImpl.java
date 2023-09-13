@@ -135,6 +135,17 @@ public class UserServiceImpl implements UserService{
         userRepository.delete(user_found);
     }
 
+    @Override
+    public User findById(String userId) throws UserNotFoundException {
+        return userRepository.findById(userId).orElseThrow(
+                ()-> new UserNotFoundException("User not found"));
+    }
+
+    @Override
+    public User findUserByEmail(String email) throws UserNotFoundException {
+      return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User cannot be found"));
+    }
+
     private boolean isValidEmail(String email){
 //        email must only contain letters, numbers, underscores, hyphens, and periods
 //        email must contain an @ symbol

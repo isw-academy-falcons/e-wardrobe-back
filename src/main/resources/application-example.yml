@@ -17,6 +17,6 @@ cloudinary:
 
 
 
-unsplash:
-  clientId: {CLIENT_ID}
-  apiUrl: {API_URL}
+#unsplash:
+#  clientId: {CLIENT_ID}
+#  apiUrl: {API_URL}
