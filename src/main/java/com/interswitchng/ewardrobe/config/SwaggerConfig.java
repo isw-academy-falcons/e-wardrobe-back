@@ -25,7 +25,7 @@ public class SwaggerConfig {
         server.setUrl("http://localhost:8080");
 
         Server server1 = new Server();
-        server1.setUrl("https://skyfitzz.com");
+        server1.setUrl("https://skyfitzz.up.railway.app");
 
         return new OpenAPI()
                 .servers(List.of(server, server1))
