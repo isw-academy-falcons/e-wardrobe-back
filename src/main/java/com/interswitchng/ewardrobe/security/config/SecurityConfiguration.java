@@ -48,10 +48,10 @@ public class SecurityConfiguration {
         return  http.build();
 
     }
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(){
-//        return (web -> web.ignoring().anyRequest());
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return (web -> web.ignoring().anyRequest());
+    }
 
 //    @Bean
 //    public ExceptionHandler exceptionHandlerFilterBean(){return  new ExceptionHandler();

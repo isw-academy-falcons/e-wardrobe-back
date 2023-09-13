@@ -24,8 +24,11 @@ public class SwaggerConfig {
         Server server = new Server();
         server.setUrl("http://localhost:8080");
 
+        Server server1 = new Server();
+        server1.setUrl("https://skyfitzz.com");
+
         return new OpenAPI()
-                .servers(List.of(server))
+                .servers(List.of(server, server1))
                 .addSecurityItem(new SecurityRequirement()
                         .addList("bearerAuth"))
                 .components(
@@ -37,7 +40,7 @@ public class SwaggerConfig {
                                         .bearerFormat("JWT"))
                 )
                 .info(new Info()
-                        .title("Falcons SkyFitzz")
+                        .title("Falcon's SkyFitzz")
                         .version("1.0"));
     }
 
