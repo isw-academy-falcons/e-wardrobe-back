@@ -22,4 +22,3 @@ public class Cloth {
     private CollectionType collectionType;
     private String userId;
 }
-

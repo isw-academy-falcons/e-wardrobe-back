@@ -26,6 +26,7 @@ public class User {
     private String password;
     private Gender gender;
     private Plan plan;
+    private boolean isActive;
     private LocalDateTime dateCreated = LocalDateTime.now();
 
     public User(String userId){

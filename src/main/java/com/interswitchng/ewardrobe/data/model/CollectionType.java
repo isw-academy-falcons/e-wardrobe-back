@@ -1,5 +1,5 @@
 package com.interswitchng.ewardrobe.data.model;
 
 public enum CollectionType {
-    UPLOADED, UNSPLASH
+    UPLOADED, SAVED_FROM_PINTREST
 }
