@@ -58,28 +58,4 @@ public class AuthServiceImpl implements AuthService {
         }
         throw new UserNotFoundException("User not found!!!");
     }
-
-
-
-//    @Override
-//    public String resetPassword(String token, ResetPasswordRequest passwordRequest) throws EWardRobeException, UserNotFoundException {
-//        Optional<VerificationToken> savedToken = tokenRepository.findByToken(token);
-//        if (savedToken.isPresent()){
-//            Validator validator = new Validator();
-//            VerificationToken tk = validator.verifyToken(token);
-//            if (tk.getToken().equals(savedToken.get().getToken())){
-//                Optional<User> user = userRepository.findByEmail(passwordRequest.getEmail().toLowerCase());
-//                if (user.isPresent()){
-//                    if (passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())){
-//                        user.get().setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
-//                        userRepository.save(user.get());
-//                    }
-//                    throw new EWardRobeException("Password does not match !!!");
-//                }
-//                throw new UserNotFoundException("User does not exist !!!");
-//            }
-//            throw new EWardRobeException("Invalid Token");
-//        }
-//        throw new UserNotFoundException("Invalid User");
-//    }
 }

@@ -22,10 +22,13 @@ public interface ClothService {
 
     Cloth findClothByUserIdAndImageUrl(String userId, String pictureUrl);
 
-    String uploadImage(MultipartFile file, String category, String description, String clothType, String collectionType)
+    String uploadImage(MultipartFile file, String category, String clothType)
             throws IOException, UserNotFoundException;
 
     Page<Cloth> getAllClothes(GetAllClothesDto getAllClothesDto, String userId, Pageable pageable) throws UserNotFoundException;
 
-    void deleteCloth(String clothId, String userId) throws UserNotFoundException, EWardRobeException;
+    void deleteCloth(String clothId) throws UserNotFoundException, EWardRobeException;
+    List<Cloth> getAllUserClothes(String userId);
+    List <Cloth> getAllUploadedUserClothes(String userId);
+    List <Cloth> getAllUnsplashUserClothes(String userId);
 }

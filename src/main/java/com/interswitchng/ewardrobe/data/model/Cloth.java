@@ -16,7 +16,6 @@ public class Cloth {
     @Id
     private String clothId;
     private String imageUrl;
-    private String description;
     private ClothType clothType;
     private Category category;
     private CollectionType collectionType;

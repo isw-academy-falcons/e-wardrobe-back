@@ -20,9 +20,9 @@ public class CloudinaryConfig {
     @Bean
     public Cloudinary cloudinary(){
         Map<String, String> config = new HashMap<>();
-        config.put("Cloud-name",CLOUD_NAME);
-        config.put("Api-key",API_KEY);
-        config.put("Api-secret",API_SECRET);
+        config.put("cloud_name",CLOUD_NAME);
+        config.put("api_key",API_KEY);
+        config.put("api_secret",API_SECRET);
         return new Cloudinary(config);
     }
 }

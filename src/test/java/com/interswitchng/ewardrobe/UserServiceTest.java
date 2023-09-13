@@ -8,12 +8,18 @@
 //import com.interswitchng.ewardrobe.exception.PasswordMisMatchException;
 //import com.interswitchng.ewardrobe.exception.UserAlreadyExistException;
 //import com.interswitchng.ewardrobe.repository.UserRepository;
+//import com.interswitchng.ewardrobe.repository.VerificationTokenRepository;
+//import com.interswitchng.ewardrobe.service.user.EmailService;
 //import com.interswitchng.ewardrobe.service.user.UserService;
+//import com.interswitchng.ewardrobe.service.user.VerificationTokenService;
+//import jakarta.mail.MessagingException;
 //import org.junit.jupiter.api.AfterEach;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.boot.test.mock.mockito.MockBean;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 //
 //import java.util.Optional;
 //
@@ -23,10 +29,19 @@
 //
 //    @Autowired
 //    private UserService userService;
+//    @MockBean
 //    private UserRepository userRepo;
+//    @MockBean
+//    private PasswordEncoder passwordEncoder;
+//    @MockBean
+//    private EmailService emailService;
+//    @Autowired
+//    private VerificationTokenService tokenService;
+//    @MockBean
+//    private VerificationTokenRepository tokenRepository;
 //
 //    @Test
-//    public void testThatAUserCanSignUp() throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException {
+//    public void testThatAUserCanSignUp() throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException, MessagingException {
 //        SignupDto request = new SignupDto();
 //        request.setFirstName("John");
 //        request.setLastName("John");
