@@ -45,13 +45,12 @@ public class GlobalExceptionHandler {
                 .build());
     }
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<APIError> handleUserNotFound(UserNotFoundException e){
+    public ResponseEntity<APIError> handleException(UserNotFoundException e){
         e.printStackTrace();
         return ResponseEntity.badRequest().body(APIError.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message(e.getLocalizedMessage())
                 .build());
     }
-
 
 }

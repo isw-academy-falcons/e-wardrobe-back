@@ -1,6 +1,5 @@
 package com.interswitchng.ewardrobe.service.cloth;
 
-import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.interswitchng.ewardrobe.data.model.*;
 import com.interswitchng.ewardrobe.dto.GetAllClothesDto;
@@ -8,8 +7,6 @@ import com.interswitchng.ewardrobe.exception.EWardRobeException;
 import com.interswitchng.ewardrobe.exception.UserNotFoundException;
 import com.interswitchng.ewardrobe.repository.ClothRepository;
 import com.interswitchng.ewardrobe.service.user.UserService;
-import com.interswitchng.ewardrobe.utils.CloudinaryUtil;
-import com.interswitchng.ewardrobe.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,16 +15,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ClothServiceImpl implements ClothService {
 
     private final UserService userService;
-    private final Cloudinary cloudinary;
-    private final UserUtil userUtil;
-    private final CloudinaryUtil cloudinaryUtil;
+//    private final Cloudinary cloudinary;
+//    private final UserUtil userUtil;
+//    private final CloudinaryUtil cloudinaryUtil;
     private final ClothRepository clothRepository;
 
     @Override
@@ -53,27 +53,28 @@ public class ClothServiceImpl implements ClothService {
     @Override
     public String uploadImage(MultipartFile file, String category, String description, String clothType, String collectionType)
             throws IOException, UserNotFoundException {
-        String email = userUtil.getAuthenticatedUserEmail();
-        User user = userService.findUserByEmail(email);
-
-        byte[] fileBytes = file.getBytes();
-        String originalFileName = file.getOriginalFilename();
-        String uniqueFileName = cloudinaryUtil.generatedFileName(originalFileName);
-        Map<String, String> uploadOptions = ObjectUtils.asMap("public_id", uniqueFileName);
-
-        Map<String, String> uploadResult = cloudinary.uploader().upload(fileBytes, uploadOptions);
-        String imageUrl = uploadResult.get("secure_url");
-
-        Cloth cloth = new Cloth();
-        cloth.setClothType(ClothType.valueOf(clothType));
-        cloth.setDescription(description);
-        cloth.setCategory(Category.valueOf(category));
-        cloth.setCollectionType(CollectionType.UPLOADED);
-        cloth.setUserId(user.getUserId());
-        cloth.setImageUrl(imageUrl);
-
-        clothRepository.save(cloth);
-        return imageUrl;
+//        String email = userUtil.getAuthenticatedUserEmail();
+//        User user = userService.findUserByEmail(email);
+//
+//        byte[] fileBytes = file.getBytes();
+//        String originalFileName = file.getOriginalFilename();
+//        String uniqueFileName = cloudinaryUtil.generatedFileName(originalFileName);
+//        Map<String, String> uploadOptions = ObjectUtils.asMap("public_id", uniqueFileName);
+//
+//        Map<String, String> uploadResult = cloudinary.uploader().upload(fileBytes, uploadOptions);
+//        String imageUrl = uploadResult.get("secure_url");
+//
+//        Cloth cloth = new Cloth();
+//        cloth.setClothType(ClothType.valueOf(clothType));
+//        cloth.setDescription(description);
+//        cloth.setCategory(Category.valueOf(category));
+//        cloth.setCollectionType(CollectionType.UPLOADED);
+//        cloth.setUserId(user.getUserId());
+//        cloth.setImageUrl(imageUrl);
+//
+//        clothRepository.save(cloth);
+//        return imageUrl;
+        return null;
     }
 
     @Override
@@ -107,7 +108,7 @@ public class ClothServiceImpl implements ClothService {
                 filteredClothes.add(cloth);
             }
         }
-        
+
 
         return new PageImpl<>(filteredClothes, pageable, filteredClothes.size());
     }

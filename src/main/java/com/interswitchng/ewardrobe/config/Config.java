@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import static org.modelmapper.convention.MatchingStrategies.STRICT;
 
@@ -16,5 +17,10 @@ public class Config {
         mapper.getConfiguration().setMatchingStrategy(STRICT);
         mapper.getConfiguration().setSkipNullEnabled(true);
         return mapper;
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 }
