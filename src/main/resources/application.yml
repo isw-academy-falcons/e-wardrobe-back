@@ -1,0 +1,40 @@
+spring:
+  data:
+    mongodb:
+      database: ${MONGODB_DB}
+      uri: ${MONGO_URL}
+      host: ${MONGOHOST}
+      username: ${MONGOUSER}
+      password: ${MONGOPASSWORD}
+      port: ${MONGOPORT}
+  servlet:
+    multipart:
+      location: uploads/
+      file-size-threshold: 2KB
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+  mail:
+    host: ${HOST}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+
+ewardrobe:
+  app:
+    SecretKey: ${SECRET_KEY}
+    FRONTEND_HOST: ${FRONTEND_HOST}
+    VERIFY_USER: ${VERIFY_USER}
+    RESET_PASSWORD: ${RESET_PASSWORD}
+
+cloudinary:
+  cloud-name: ${CLOUD_NAME}
+  api-key: ${API_KEY}
+  api-secret: ${API_SECRET}
+

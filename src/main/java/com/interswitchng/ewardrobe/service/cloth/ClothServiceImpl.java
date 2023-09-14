@@ -1,5 +1,6 @@
 package com.interswitchng.ewardrobe.service.cloth;
 
+import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.interswitchng.ewardrobe.data.model.*;
 import com.interswitchng.ewardrobe.dto.GetAllClothesDto;
@@ -7,6 +8,8 @@ import com.interswitchng.ewardrobe.exception.EWardRobeException;
 import com.interswitchng.ewardrobe.exception.UserNotFoundException;
 import com.interswitchng.ewardrobe.repository.ClothRepository;
 import com.interswitchng.ewardrobe.service.user.UserService;
+import com.interswitchng.ewardrobe.utils.CloudinaryUtil;
+import com.interswitchng.ewardrobe.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,9 +28,9 @@ import java.util.Optional;
 public class ClothServiceImpl implements ClothService {
 
     private final UserService userService;
-//    private final Cloudinary cloudinary;
-//    private final UserUtil userUtil;
-//    private final CloudinaryUtil cloudinaryUtil;
+    private final Cloudinary cloudinary;
+    private final UserUtil userUtil;
+    private final CloudinaryUtil cloudinaryUtil;
     private final ClothRepository clothRepository;
 
     @Override
@@ -51,30 +54,28 @@ public class ClothServiceImpl implements ClothService {
     }
 
     @Override
-    public String uploadImage(MultipartFile file, String category, String description, String clothType, String collectionType)
+    public String uploadImage(MultipartFile file, String category, String clothType)
             throws IOException, UserNotFoundException {
-//        String email = userUtil.getAuthenticatedUserEmail();
-//        User user = userService.findUserByEmail(email);
-//
-//        byte[] fileBytes = file.getBytes();
-//        String originalFileName = file.getOriginalFilename();
-//        String uniqueFileName = cloudinaryUtil.generatedFileName(originalFileName);
-//        Map<String, String> uploadOptions = ObjectUtils.asMap("public_id", uniqueFileName);
-//
-//        Map<String, String> uploadResult = cloudinary.uploader().upload(fileBytes, uploadOptions);
-//        String imageUrl = uploadResult.get("secure_url");
-//
-//        Cloth cloth = new Cloth();
-//        cloth.setClothType(ClothType.valueOf(clothType));
-//        cloth.setDescription(description);
-//        cloth.setCategory(Category.valueOf(category));
-//        cloth.setCollectionType(CollectionType.UPLOADED);
-//        cloth.setUserId(user.getUserId());
-//        cloth.setImageUrl(imageUrl);
-//
-//        clothRepository.save(cloth);
-//        return imageUrl;
-        return null;
+        String email = userUtil.getAuthenticatedUserEmail();
+        User user = userService.findUserByEmail(email);
+
+        byte[] fileBytes = file.getBytes();
+        String originalFileName = file.getOriginalFilename();
+        String uniqueFileName = cloudinaryUtil.generatedFileName(originalFileName);
+        Map<String, String> uploadOptions = ObjectUtils.asMap("public_id", uniqueFileName);
+
+        Map<String, String> uploadResult = cloudinary.uploader().upload(fileBytes, uploadOptions);
+        String imageUrl = uploadResult.get("secure_url");
+
+        Cloth cloth = new Cloth();
+        cloth.setClothType(ClothType.valueOf(clothType));
+        cloth.setCategory(Category.valueOf(category));
+        cloth.setCollectionType(CollectionType.UPLOADED);
+        cloth.setUserId(user.getUserId());
+        cloth.setImageUrl(imageUrl);
+
+        clothRepository.save(cloth);
+        return imageUrl;
     }
 
     @Override
@@ -103,8 +104,7 @@ public class ClothServiceImpl implements ClothService {
 
             if (includeCloth) {
                 filteredClothes.add(cloth);
-            }
-            else{
+            } else {
                 filteredClothes.add(cloth);
             }
         }
@@ -115,19 +115,31 @@ public class ClothServiceImpl implements ClothService {
 
 
     @Override
-    public void deleteCloth(String clothId, String userId) throws UserNotFoundException, EWardRobeException {
-
-        User foundUser = userService.findById(userId);
-
-        Cloth cloth = clothRepository.findById(clothId).orElseThrow(() ->
-                new EWardRobeException("Cloth not found"));
-
-
-        if (!cloth.getUserId().equals(foundUser.getUserId())) {
-            throw new UserNotFoundException("User is not authorized to delete this cloth");
-        }
-
+    public void deleteCloth(String clothId) throws UserNotFoundException, EWardRobeException {
+        Cloth cloth = clothRepository.findById(clothId).orElseThrow(
+                () -> new EWardRobeException("Cloth not found"));
         clothRepository.delete(cloth);
+    }
+
+    @Override
+    public List<Cloth> getAllUserClothes(String userId) {
+        return clothRepository.findClothByUserId(userId).stream().toList();
+    }
+
+    @Override
+    public List<Cloth> getAllUploadedUserClothes(String userId) {
+        return clothRepository.findClothByUserId(userId)
+                .stream()
+                .filter(cloth -> cloth.getCollectionType() == CollectionType.UPLOADED)
+                .toList();
+    }
+
+    @Override
+    public List<Cloth> getAllUnsplashUserClothes(String userId) {
+        return clothRepository.findClothByUserId(userId)
+                .stream()
+                .filter(cloth -> cloth.getCollectionType() == CollectionType.UNSPLASH)
+                .toList();
     }
 
 }

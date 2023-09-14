@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.OK;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/cloth")
@@ -26,12 +28,10 @@ public class ClothController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadOutfit(@RequestParam("file") MultipartFile file,
                                                @RequestParam("category") String category,
-                                               @RequestParam("description") String description,
-                                               @RequestParam("clothType") String clothType,
-                                               @RequestParam("collectionType") String collectionType)
+                                               @RequestParam("clothType") String clothType)
             throws IOException, UserNotFoundException {
         return new ResponseEntity<>(
-                clothService.uploadImage(file, category, description, clothType, collectionType), HttpStatus.OK);
+                clothService.uploadImage(file, category, clothType), OK);
     }
 
     @GetMapping("/all/clothes")
@@ -56,13 +56,19 @@ public class ClothController {
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteCloth(@RequestParam String clothId, @RequestParam String userId) {
+    public ResponseEntity<String> deleteCloth(@RequestParam String clothId) {
         try {
 
-            clothService.deleteCloth(clothId, userId);
+            clothService.deleteCloth(clothId);
             return ResponseEntity.ok("Cloth deleted successfully");
         } catch (EWardRobeException | UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cloth not found");
         }
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity <List<Cloth>> userClothes(@PathVariable String id){
+        List <Cloth> clothes = clothService.getAllUserClothes(id);
+        return new ResponseEntity<>(clothes, OK);
     }
 }
