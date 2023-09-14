@@ -62,7 +62,7 @@ public class EmailServiceImpl implements EmailService{
     @Override
     @Async
     public void sendRegistrationEmail(User user, String token) throws MessagingException {
-        String link = frontEndHost + uri + token;
+        String link = frontEndHost + "/verify?token=" + token;
         sendEmail(SendEmailRequest.builder()
                 .subject("Welcome to SkyFitz - Your Ultimate eWardrobe Experience!")
                 .emailAddress(user.getEmail())
