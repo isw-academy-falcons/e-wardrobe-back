@@ -43,13 +43,4 @@ public class SwaggerConfig {
                         .title("Falcon's SkyFitzz")
                         .version("1.0"));
     }
-
-    @Bean
-    public GroupedOpenApi httpApi() {
-        return GroupedOpenApi.builder()
-                .group("https")
-                .pathsToMatch("/**")
-                .build();
-    }
-
 }

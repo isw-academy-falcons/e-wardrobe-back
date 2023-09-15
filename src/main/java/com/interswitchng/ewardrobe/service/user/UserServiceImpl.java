@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -31,49 +31,47 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public SignupResponse signUp(SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException, MessagingException {
-        if (!isValidEmail(signupDto.getEmail().toLowerCase()) && !isValidPassword(signupDto.getPassword())){
-            throw new InvalidEmailException(signupDto.getEmail() +" is not a valid Email address");
-        }
-            Optional<User> savedUser = userRepository.findUserByEmailIgnoreCase(signupDto.getEmail());
-            if (savedUser.isPresent()){
-                throw new UserAlreadyExistException("User with this email address already exist !!!");
-            }else{
-                if (signupDto.getPassword().equals(signupDto.getConfirmPassword())){
-                    User newUser = new User();
-                    newUser.setFirstname(signupDto.getFirstName());
-                    newUser.setLastname(signupDto.getLastName());
-                    newUser.setEmail(signupDto.getEmail().toLowerCase());
-                    newUser.setPassword(passwordEncoder.encode(signupDto.getPassword()));
-                    newUser.setGender(Gender.valueOf(signupDto.getGender().toUpperCase()));
-                    newUser.setPlan(Plan.FREE);
-                    newUser.setActive(false);
-                    User saved = userRepository.save(newUser);
-                    VerificationToken token = tokenService.createEmailVerificationToken(newUser.getEmail().toLowerCase());
-                    emailService.sendRegistrationEmail(newUser,token.getToken());
-                    log.info(token.getToken());
-                    return SignupResponse.builder()
-                            .email(saved.getEmail())
-                            .firstName(saved.getFirstname())
-                            .lastName(saved.getLastname())
-                            .message("User account created successfully. ")
-                            .build();
-                }
-                else {
-                    throw new PasswordMisMatchException("Password does not match");
-                }
+    public SignupResponse signUp(SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException, MessagingException, EWardRobeException {
+        isValidEmail(signupDto.getEmail());
+        isValidPassword(signupDto.getPassword());
+        Optional<User> savedUser = userRepository.findUserByEmailIgnoreCase(signupDto.getEmail());
+        if (savedUser.isPresent()) {
+            throw new UserAlreadyExistException("User with this email address already exist !!!");
+        } else {
+            if (signupDto.getPassword().equals(signupDto.getConfirmPassword())) {
+                User newUser = new User();
+                newUser.setFirstname(signupDto.getFirstName());
+                newUser.setLastname(signupDto.getLastName());
+                newUser.setEmail(signupDto.getEmail().toLowerCase());
+                newUser.setPassword(passwordEncoder.encode(signupDto.getPassword()));
+                newUser.setGender(Gender.valueOf(signupDto.getGender().toUpperCase()));
+                newUser.setPlan(Plan.FREE);
+                newUser.setActive(false);
+                User saved = userRepository.save(newUser);
+                VerificationToken token = tokenService.createEmailVerificationToken(newUser.getEmail().toLowerCase());
+                emailService.sendRegistrationEmail(newUser, token.getToken());
+                log.info(token.getToken());
+                return SignupResponse.builder()
+                        .email(saved.getEmail())
+                        .firstName(saved.getFirstname())
+                        .lastName(saved.getLastname())
+                        .message("User account created successfully. ")
+                        .build();
+            } else {
+                throw new PasswordMisMatchException("Password does not match");
             }
+        }
 
     }
 
     @Override
     public String verifyUser(String token) throws EWardRobeException, UserNotFoundException {
         Optional<VerificationToken> savedToken = tokenRepository.findByToken(token);
-        if (savedToken.isPresent()){
+        if (savedToken.isPresent()) {
             VerificationToken tk = verifyToken(savedToken.get().getToken());
-            if (tk.getToken().equals(savedToken.get().getToken())){
+            if (tk.getToken().equals(savedToken.get().getToken())) {
                 Optional<User> savedUser = userRepository.findByEmail(savedToken.get().getEmail());
-                if (savedUser.isPresent()){
+                if (savedUser.isPresent()) {
                     savedToken.get().setTimeUsed(LocalDateTime.now());
                     savedUser.get().setActive(true);
                     tokenRepository.save(savedToken.get());
@@ -103,12 +101,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public String resetPassword(String token, ResetPasswordRequest passwordRequest) throws EWardRobeException, UserNotFoundException {
         Optional<VerificationToken> savedToken = tokenRepository.findByToken(token);
-        if (savedToken.isPresent()){
-            VerificationToken tk = verifyToken(savedToken.get().getToken()) ;
-            if (tk.getToken().equals(savedToken.get().getToken())){
+        if (savedToken.isPresent()) {
+            VerificationToken tk = verifyToken(savedToken.get().getToken());
+            if (tk.getToken().equals(savedToken.get().getToken())) {
                 Optional<User> user = userRepository.findByEmail(savedToken.get().getEmail());
-                if (user.isPresent()){
-                    if (passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())){
+                if (user.isPresent()) {
+                    if (passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
                         user.get().setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
                         savedToken.get().setTimeUsed(LocalDateTime.now());
                         tokenRepository.save(savedToken.get());
@@ -126,7 +124,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User loadUser(String email) throws InvalidEmailException {
-        return userRepository.findUserByEmailIgnoreCase(email).orElseThrow(()-> new InvalidEmailException("Bad Credentials"));
+        return userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() -> new InvalidEmailException("Bad Credentials"));
     }
 
     @Override
@@ -138,24 +136,32 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findById(String userId) throws UserNotFoundException {
         return userRepository.findById(userId).orElseThrow(
-                ()-> new UserNotFoundException("User not found"));
+                () -> new UserNotFoundException("User not found"));
     }
 
     @Override
     public User findUserByEmail(String email) throws UserNotFoundException {
-      return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User cannot be found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User cannot be found"));
     }
 
-    private boolean isValidEmail(String email){
+    private void isValidEmail(String email) throws InvalidEmailException {
 //        email must only contain letters, numbers, underscores, hyphens, and periods
 //        email must contain an @ symbol
 //        email must contain . after @ symbol
-        return email.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$");
+        if (!email.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
+            throw new InvalidEmailException(email + " is not a valid Email address");
+        }
+        ;
     }
-    private boolean isValidPassword(String password){
+
+    private void isValidPassword(String password) throws EWardRobeException {
 //        password must have at least 8 characters, 1 upper case, 1 number, 1 special character
-        return password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$\n");
+//        return password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?!.*\\s).{8,}$");
+        if (!password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~@$!%^(#){/}*?&])[A-Za-z\\d@~$!%^(#){/}*?&]{8,}")) {
+            throw new EWardRobeException("Invalid password: Password must have at least 8 characters, 1 upper case, 1 number, 1 special character");
+        }
     }
+
     private VerificationToken verifyToken(String token) throws EWardRobeException {
 
         Optional<VerificationToken> savedToken = tokenRepository.findByToken(token);

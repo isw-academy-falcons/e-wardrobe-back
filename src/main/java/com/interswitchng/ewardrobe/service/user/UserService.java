@@ -9,7 +9,7 @@ import com.interswitchng.ewardrobe.exception.*;
 import jakarta.mail.MessagingException;
 
 public interface UserService {
-    SignupResponse signUp(SignupDto signupDto) throws PasswordMisMatchException, UserAlreadyExistException, InvalidEmailException, MessagingException;
+    SignupResponse signUp(SignupDto signupDto) throws PasswordMisMatchException, UserAlreadyExistException, InvalidEmailException, MessagingException, EWardRobeException;
     String verifyUser(String token) throws EWardRobeException, UserNotFoundException;
     String forgotPassword(String email) throws UserNotFoundException, MessagingException;
 
