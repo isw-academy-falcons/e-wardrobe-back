@@ -1,11 +1,14 @@
 package com.interswitchng.ewardrobe.controller.cloth;
 
+import com.interswitchng.ewardrobe.data.model.Category;
 import com.interswitchng.ewardrobe.data.model.Cloth;
+import com.interswitchng.ewardrobe.dto.ClothListDto;
 import com.interswitchng.ewardrobe.dto.GetAllClothesDto;
 import com.interswitchng.ewardrobe.exception.EWardRobeException;
 import com.interswitchng.ewardrobe.exception.UserNotFoundException;
 import com.interswitchng.ewardrobe.service.cloth.ClothService;
 import lombok.RequiredArgsConstructor;
+import org.python.antlr.ast.Str;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -25,13 +29,14 @@ import static org.springframework.http.HttpStatus.OK;
 public class ClothController {
 
     private final ClothService clothService;
+
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadOutfit(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<List<String>> uploadOutfit(@RequestParam("file") List<MultipartFile> file,
                                                @RequestParam("category") String category,
                                                @RequestParam("clothType") String clothType)
             throws IOException, UserNotFoundException {
-        return new ResponseEntity<>(
-                clothService.uploadImage(file, category, clothType), OK);
+        List<String> response  = clothService.uploadImage(file, category, clothType);
+        return new ResponseEntity<>(response, OK);
     }
 
     @GetMapping("/all/clothes")
@@ -51,7 +56,7 @@ public class ClothController {
         getAllClothesDto.setCollectionType(collectionType);
 
 
-        return clothService.getAllClothes(getAllClothesDto, userId,pageable);
+        return clothService.getAllClothes(getAllClothesDto, userId, pageable);
     }
 
 
@@ -67,8 +72,14 @@ public class ClothController {
     }
 
     @GetMapping("/all/{id}")
-    public ResponseEntity <List<Cloth>> userClothes(@PathVariable String id){
-        List <Cloth> clothes = clothService.getAllUserClothes(id);
+    public ResponseEntity<List<Cloth>> userClothes(@PathVariable String id) {
+        List<Cloth> clothes = clothService.getAllUserClothes(id);
         return new ResponseEntity<>(clothes, OK);
+    }
+
+    @GetMapping("/generate/{id}")
+    public ResponseEntity<?> generateOutfits(@PathVariable String id, @RequestParam Category category) throws EWardRobeException {
+        var response = clothService.generateOutfit(id, category);
+        return new ResponseEntity<>(response, OK);
     }
 }
