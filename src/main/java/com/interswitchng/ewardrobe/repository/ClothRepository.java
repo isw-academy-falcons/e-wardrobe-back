@@ -14,11 +14,7 @@ import java.util.Optional;
 public interface ClothRepository extends MongoRepository<Cloth,String> {
     Optional<Cloth> findByImageUrl(String pictureUrl);
     List<Cloth> findClothByUserId(String userId);
-
     Cloth findClothByUserIdAndImageUrl(String userId, String pictureUrl);
-//
-//    Page<Cloth> findAllByUserId(String userId, Pageable pageable);
-//
-//    Page<Cloth> findAllByCriteria(ClothType clothType, Category category, CollectionType collectionType,
-//                                  String userId, Pageable pageable);
+    List<Cloth> findClothsByUserIdAndCategory(String id, Category category);
+
 }
