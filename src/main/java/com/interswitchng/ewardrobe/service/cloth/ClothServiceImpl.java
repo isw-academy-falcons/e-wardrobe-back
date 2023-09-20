@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -183,7 +184,7 @@ public class ClothServiceImpl implements ClothService {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_TYPE, "application/json");
         HttpEntity<?> http = new HttpEntity<>(cloths, header);
-        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/matches", GET, http, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/matches", POST, http, String.class);
 
         if (responseEntity.getStatusCode() != OK) {
             throw new EWardRobeException("Failed to generate outfit: " + responseEntity.getStatusCode());
