@@ -52,7 +52,8 @@ public class AuthServiceImpl implements AuthService {
                 User foundUser = userRepository.findByEmail(loginDto.getEmail().toLowerCase()).orElseThrow(() -> new EWardRobeException("user not found"));
                 SecureUser user = new SecureUser(foundUser);
                 String jwtToken = jwtService.generateToken(user);
-                return AuthenticationResponse.of(jwtToken, user.getUserId());
+                String fullName = foundUser.getFirstname() + " " + foundUser.getLastname();
+                return AuthenticationResponse.of(jwtToken, user.getUserId(), fullName);
             }
             throw new EWardRobeException("Your account has not been verified !!!");
         }
