@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
                 SecureUser user = new SecureUser(foundUser);
                 String jwtToken = jwtService.generateToken(user);
                 String fullName = foundUser.getFirstname() + " " + foundUser.getLastname();
-                return AuthenticationResponse.of(jwtToken, user.getUserId(), fullName, foundUser.getEmail(), foundUser.getPlan().toString(), foundUser.getEmail());
+                return AuthenticationResponse.of(jwtToken, user.getUserId(), fullName, foundUser.getPlan().toString(), foundUser.getGender().name(), foundUser.getEmail());
             }
             throw new EWardRobeException("Your account has not been verified !!!");
         }
