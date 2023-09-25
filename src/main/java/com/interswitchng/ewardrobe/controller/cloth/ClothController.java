@@ -71,15 +71,15 @@ public class ClothController {
         }
     }
 
-    @GetMapping("/all/{id}")
-    public ResponseEntity<List<Cloth>> userClothes(@PathVariable String id) {
-        List<Cloth> clothes = clothService.getAllUserClothes(id);
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<Cloth>> userClothes(@PathVariable String userId) {
+        List<Cloth> clothes = clothService.getAllUserClothes(userId);
         return new ResponseEntity<>(clothes, OK);
     }
 
-    @GetMapping("/generate/{id}")
-    public ResponseEntity<?> generateOutfits(@PathVariable String id, @RequestParam Category category) throws EWardRobeException {
-        var response = clothService.generateOutfit(id, category);
+    @GetMapping("/generate/{userId}")
+    public ResponseEntity<?> generateOutfits(@PathVariable String userId, @RequestParam Category category) throws EWardRobeException {
+        var response = clothService.generateOutfit(userId, category);
         return new ResponseEntity<>(response, OK);
     }
 }
