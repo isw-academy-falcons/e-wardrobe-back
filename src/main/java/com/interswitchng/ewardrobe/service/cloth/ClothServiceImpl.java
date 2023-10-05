@@ -11,16 +11,13 @@ import com.interswitchng.ewardrobe.repository.ClothRepository;
 import com.interswitchng.ewardrobe.service.user.UserService;
 import com.interswitchng.ewardrobe.utils.CloudinaryUtil;
 import com.interswitchng.ewardrobe.utils.UserUtil;
-import jakarta.mail.Header;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +26,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
@@ -183,7 +180,7 @@ public class ClothServiceImpl implements ClothService {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_TYPE, "application/json");
         HttpEntity<?> http = new HttpEntity<>(cloths, header);
-        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/matches", GET, http, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/matches", POST, http, String.class);
 
         if (responseEntity.getStatusCode() != OK) {
             throw new EWardRobeException("Failed to generate outfit: " + responseEntity.getStatusCode());

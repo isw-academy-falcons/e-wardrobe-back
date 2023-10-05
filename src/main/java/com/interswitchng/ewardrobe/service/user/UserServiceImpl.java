@@ -106,6 +106,7 @@ public class UserServiceImpl implements UserService {
             if (tk.getToken().equals(savedToken.get().getToken())) {
                 Optional<User> user = userRepository.findByEmail(savedToken.get().getEmail());
                 if (user.isPresent()) {
+                    isValidPassword(passwordRequest.getPassword());
                     if (passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
                         user.get().setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
                         savedToken.get().setTimeUsed(LocalDateTime.now());
