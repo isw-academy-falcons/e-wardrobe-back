@@ -88,4 +88,16 @@ public class ClothController {
         var response = clothService.generateDress(userId, category);
         return new ResponseEntity<>(response, OK);
     }
+
+    @GetMapping("/all/uploaded/{userId}")
+    public ResponseEntity<List<Cloth>> getUploaded(@PathVariable String userId){
+        List<Cloth> clothes = clothService.getAllUploadedUserClothes(userId);
+        return new ResponseEntity<>(clothes, OK);
+    }
+
+    @GetMapping("/all/unsplash/{userId}")
+    public ResponseEntity<List<Cloth>> getUnsplash(@PathVariable String userId){
+        List<Cloth> clothes = clothService.getAllUnsplashUserClothes(userId);
+        return new ResponseEntity<>(clothes, OK);
+    }
 }
