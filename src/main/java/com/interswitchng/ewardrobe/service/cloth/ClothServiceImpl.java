@@ -201,7 +201,7 @@ public class ClothServiceImpl implements ClothService {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_TYPE, "application/json");
         HttpEntity<?> http = new HttpEntity<>(clothListDto, header);
-        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/random_dress", POST, http, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("https://sky-fitzz.onrender.com/random_dress", POST, http, String.class);
 
         if (responseEntity.getStatusCode() != OK) {
             throw new EWardRobeException("Failed to generate outfit: " + responseEntity.getStatusCode());
