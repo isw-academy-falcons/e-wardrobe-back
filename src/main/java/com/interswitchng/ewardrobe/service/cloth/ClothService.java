@@ -9,6 +9,7 @@ import com.interswitchng.ewardrobe.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,4 +39,5 @@ public interface ClothService {
     List<Cloth> getAllUnsplashUserClothes(String userId);
 
     List<String> generateOutfit(String id, Category category) throws EWardRobeException;
+    String generateDress(String id, Category category) throws EWardRobeException;
 }

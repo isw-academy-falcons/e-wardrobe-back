@@ -82,4 +82,10 @@ public class ClothController {
         var response = clothService.generateOutfit(userId, category);
         return new ResponseEntity<>(response, OK);
     }
+
+    @GetMapping("/generate_dress/{userId}")
+    public ResponseEntity<?> generateDress(@PathVariable String userId, @RequestParam Category category) throws EWardRobeException {
+        var response = clothService.generateDress(userId, category);
+        return new ResponseEntity<>(response, OK);
+    }
 }
