@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     public SignupResponse signUp(SignupDto signupDto) throws UserAlreadyExistException, PasswordMisMatchException, InvalidEmailException, MessagingException, EWardRobeException {
         isValidEmail(signupDto.getEmail());
         isValidPassword(signupDto.getPassword());
+        isNameValid(signupDto.getFirstName(), signupDto.getLastName());
         Optional<User> savedUser = userRepository.findUserByEmailIgnoreCase(signupDto.getEmail());
         if (savedUser.isPresent()) {
             throw new UserAlreadyExistException("User with this email address already exist !!!");
@@ -161,6 +162,11 @@ public class UserServiceImpl implements UserService {
         if (!password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~@$!%^(#){/}*?&])[A-Za-z\\d@~$!%^(#){/}*?&]{8,}")) {
             throw new EWardRobeException("Invalid password: Password must have at least 8 characters, 1 upper case, 1 number, 1 special character");
         }
+    }
+
+    private void isNameValid(String firstname, String lastname) throws EWardRobeException {
+        if (!firstname.matches("^[A-Za-z-']{2,30}$") || !lastname.matches("^[A-Za-z-']{2,30}$"))
+            throw new EWardRobeException("Invalid Firstname or Lastname");
     }
 
     private VerificationToken verifyToken(String token) throws EWardRobeException {
