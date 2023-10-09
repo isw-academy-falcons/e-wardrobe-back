@@ -161,10 +161,25 @@ public class ClothServiceImpl implements ClothService {
                 .collect(Collectors.groupingBy(Cloth::getClothType));
 
         ClothListDto clothListDto = new ClothListDto();
-        clothListDto.setTops(extractImageUrl(clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList())));
+        int numberOfTops = clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList()).size();
+
+        if (numberOfTops < 5) {
+            clothListDto.setTops(extractImageUrl(clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList())));
+        } else {
+            clothListDto.setTops(randomlySelectTops(extractImageUrl(clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList()))));
+        }
         clothListDto.setBottoms(extractImageUrl(clothesByType.getOrDefault(ClothType.BOTTOM, Collections.emptyList())));
         clothListDto.setDresses(extractImageUrl(clothesByType.getOrDefault(ClothType.DRESS, Collections.emptyList())));
         return clothListDto;
+    }
+
+    private List<String> randomlySelectTops(List<String> tops) {
+        List<String> randomlySelectedTops = new ArrayList<>();
+        Collections.shuffle(tops);
+        for (int i = 0; i < 5; i++) {
+            randomlySelectedTops.add(tops.get(i));
+        }
+        return randomlySelectedTops;
     }
 
     private List<String> extractImageUrl(List<Cloth> clothes) {
@@ -201,7 +216,7 @@ public class ClothServiceImpl implements ClothService {
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_TYPE, "application/json");
         HttpEntity<?> http = new HttpEntity<>(clothListDto, header);
-        ResponseEntity<String> responseEntity = restTemplate.exchange("https://sky-fitzz.onrender.com/random_dress", POST, http, String.class);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/random_dress", POST, http, String.class);
 
         if (responseEntity.getStatusCode() != OK) {
             throw new EWardRobeException("Failed to generate outfit: " + responseEntity.getStatusCode());
