@@ -12,25 +12,32 @@ import com.interswitchng.ewardrobe.service.user.UserService;
 import com.interswitchng.ewardrobe.utils.CloudinaryUtil;
 import com.interswitchng.ewardrobe.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ClothServiceImpl implements ClothService {
 
     private final UserService userService;
@@ -154,10 +161,25 @@ public class ClothServiceImpl implements ClothService {
                 .collect(Collectors.groupingBy(Cloth::getClothType));
 
         ClothListDto clothListDto = new ClothListDto();
-        clothListDto.setTops(extractImageUrl(clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList())));
+        int numberOfTops = clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList()).size();
+
+        if (numberOfTops < 5) {
+            clothListDto.setTops(extractImageUrl(clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList())));
+        } else {
+            clothListDto.setTops(randomlySelectTops(extractImageUrl(clothesByType.getOrDefault(ClothType.TOP, Collections.emptyList()))));
+        }
         clothListDto.setBottoms(extractImageUrl(clothesByType.getOrDefault(ClothType.BOTTOM, Collections.emptyList())));
         clothListDto.setDresses(extractImageUrl(clothesByType.getOrDefault(ClothType.DRESS, Collections.emptyList())));
         return clothListDto;
+    }
+
+    private List<String> randomlySelectTops(List<String> tops) {
+        List<String> randomlySelectedTops = new ArrayList<>();
+        Collections.shuffle(tops);
+        for (int i = 0; i < 5; i++) {
+            randomlySelectedTops.add(tops.get(i));
+        }
+        return randomlySelectedTops;
     }
 
     private List<String> extractImageUrl(List<Cloth> clothes) {
@@ -186,5 +208,19 @@ public class ClothServiceImpl implements ClothService {
             throw new EWardRobeException("Failed to generate outfit: " + responseEntity.getStatusCode());
         }
         return List.of(Objects.requireNonNull(responseEntity.getBody()).split(","));
+    }
+
+    @Override
+    public String generateDress(String id, Category category) throws EWardRobeException {
+        ClothListDto clothListDto = sendClothesToModel(id, category);
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_TYPE, "application/json");
+        HttpEntity<?> http = new HttpEntity<>(clothListDto, header);
+        ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:5000/random_dress", POST, http, String.class);
+
+        if (responseEntity.getStatusCode() != OK) {
+            throw new EWardRobeException("Failed to generate outfit: " + responseEntity.getStatusCode());
+        }
+        return responseEntity.getBody();
     }
 }
